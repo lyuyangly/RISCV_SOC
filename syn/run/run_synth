@@ -1,0 +1,5 @@
+#!/bin/sh
+source /home/software/xilinx/Vivado/2015.2/settings64.sh
+rm -rf *.log
+vivado -nojournal -mode batch -source ../scr/syn_common.tcl -tclargs riscv_sopc ../..
+rm -rf .Xil fsm_encoding.os
