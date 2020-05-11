@@ -168,7 +168,7 @@ assign ihwrite              = 1'b0;
 assign ihwdata              = INSTR_NOP;
 assign ihprot               = 4'h1;
 assign if_parcel            = ihrdata;
-assign if_parcel_valid      = {2{ihready & (istate == S_BURST1)}};
+assign if_parcel_valid      = {2{ihready & (istate == S_BURST1) & if_stall_nxt_pc}};
 assign if_parcel_misaligned = 1'b0;
 assign if_parcel_page_fault = 1'b0;
 
