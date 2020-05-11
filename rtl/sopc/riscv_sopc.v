@@ -237,7 +237,7 @@ apb_subsystem #(
     .PCLK                   (clk                ),
     .PCLKG                  (clk                ),
     .PCLKEN                 (1'b1               ),
-    .PRESETn                (~rst_sync          ),
+    .PRESETn                (rst_sync           ),
     // APB extension ports
     .PADDR                  (                   ),
     .PWRITE                 (                   ),

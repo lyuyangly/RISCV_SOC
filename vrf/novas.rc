@@ -294,8 +294,6 @@ Comment-FontOverride = FALSE
 [FSM_Dlg-Print]
 Orientation = Landscape
 [FileBrowser]
-nWaveEditVirtualFileDirHistory = /home/lyuyang/WORK/RoaLogicRV12/vrf/wave.fsdb,/home/lyuyang/WORK/RoaLogicRV12/vrf,
-nWaveOpenFsdbDirHistory = /home/lyuyang/WORK/RoaLogicRV12/vrf/wave.fsdb,/home/lyuyang/WORK/RoaLogicRV12/vrf,
 [Form]
 version = Verdi3_J-2014.12-SP2
 openfile.fm = 100,100,723,524
@@ -304,9 +302,9 @@ wave/unknownSave.fm = 100,100,520,272
 tsMDT.fm = 100,100,659,517
 specifyArrayIndexForm.fm = 100,100,300,450
 wave/createBus.fm = 100,100,725,620
-textSearchInPrj.fm = 855,197,564,224
 wave/getSignal.fm = 100,100,856,560
 wave/openWFile.fm = 100,100,823,682
+textSearchInPrj.fm = 874,515,564,224
 [General]
 autoSaveSession = FALSE
 TclAutoSource = 
@@ -457,8 +455,8 @@ savePropDtl = TRUE
 aboutVerdiDialog = 555,208,773,619
 importDesignForm = 646,234,634,611
 QwInfoMsgDlg = 578,389,750,250
-QwUserAskDlg = 828,761,324,138
-QwWarnMsgDlg = 770,795,600,250
+QwWarnMsgDlg = 776,795,600,250
+QwUserAskDlg = 831,791,324,138
 [QwSettings.QwMainWindow.shortcuts.Verdi.ViewSource1Group]
 shortcut = 
 [QwSettings.QwMainWindow.shortcuts.Verdi.hbBookmark1]
@@ -504,7 +502,6 @@ hideRecursiceNode = FALSE
 3 = string (session file name)
 4 = string (session file name)
 5 = string (session file name)
-1 = /home/lyuyang/WORK/RoaLogicRV12/verdi/verdiLog/novas_autosave.ses
 [Signal List]
 sigListBackgroundColor = ID_GRAY6
 sigListForegroundColor = ID_BLACK
@@ -803,7 +800,7 @@ scope_to_save_with_macro
 open_file_dir
 open_rc_file_dir
 getSignalForm = 100 100 856 560 100 400 100 30
-viewPort = 0 30 1920 590 261 65
+viewPort = 0 30 1920 380 261 65
 signalSpacing = 5
 digitalSignalHeight = 15
 analogSignalHeight = 98
@@ -1046,9 +1043,6 @@ curveWindow_Drag&Drop_Mode = TRUE
 hspiceIncOpenMode = TRUE
 pcSelectMode = TRUE
 hierarchyDelimiter = /
-RecentFile1 = /home/lyuyang/WORK/RoaLogicRV12/vrf/wave.fsdb
-RecentFile2 = /home/lyuyang/WORK/RoaLogicRV12/vrf/VirtualFile.vf
-RecentFile3 = /home/lyuyang/WORK/RoaLogicRV12/vrf/riscv_core_tb_top.fsdb
 open_file_time_range = FALSE
 value_window_aligment = Right
 signal_window_alignment = Auto
@@ -1513,7 +1507,7 @@ AddImportArgument = FALSE
 LineBreakWithScope = TRUE
 StopAfterCompileOption = -s
 [wave.0]
-viewPort = 0 30 1920 590 261 65
+viewPort = 0 30 1920 380 261 65
 [wave.1]
 viewPort = 127 219 960 332 100 65
 [wave.2]

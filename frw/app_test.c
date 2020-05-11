@@ -8,7 +8,7 @@ extern int xmodemReceive(unsigned char*, int);
 
 typedef void (*p_func)(void);
 
-#define LOAD_BASE 0x1000
+#define LOAD_BASE 0x2000
 
 void delay(unsigned int t)
 {
@@ -24,7 +24,6 @@ int main(void)
     p_func boot_main=(p_func)(LOAD_BASE);
 
     // GPIO
-	*((volatile uint32_t *)(GPIO_BASE)) = 0x5;
 	*((volatile uint32_t *)(GPIO_BASE)) = 0xa;
 
     // UART 115200 8N1

@@ -236,7 +236,7 @@ endgenerate
 
   //result
   always_comb
-    unique casex ( {mul_bubble,div_bubble,lsu_bubble} )
+    casex ( {mul_bubble,div_bubble,lsu_bubble} )
       3'b110 : ex_r = lsu_r;
       3'b101 : ex_r = div_r;
       3'b011 : ex_r = mul_r;

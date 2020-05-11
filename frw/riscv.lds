@@ -6,8 +6,8 @@ MEMORY
     RAM (rwx) : ORIGIN = 0x0, LENGTH = 8K
 }
 
-STACK_SIZE  = 512;
-HEAP_SIZE   = 512;
+STACK_SIZE  = 128;
+HEAP_SIZE   = 128;
 
 SECTIONS
 {

@@ -149,7 +149,7 @@ module riscv_mul #(
 
   //multiplier operand-A
   always_comb 
-    unique casex ( {func7,func3,opcode} )
+    casex ( {func7,func3,opcode} )
       MULW   : mult_opA = abs( sext32(opA32) ); //RV64
       MULHU  : mult_opA =             opA     ;
       default: mult_opA = abs(        opA    );
@@ -157,7 +157,7 @@ module riscv_mul #(
 
   //multiplier operand-B
   always_comb 
-    unique casex ( {func7,func3,opcode} )
+    casex ( {func7,func3,opcode} )
       MULW   : mult_opB = abs( sext32(opB32) ); //RV64
       MULHSU : mult_opB =             opB     ;
       MULHU  : mult_opB =             opB     ;
@@ -166,7 +166,7 @@ module riscv_mul #(
 
   //negate multiplier output?
   always_comb 
-    unique casex ( {func7,func3,opcode} )
+    casex ( {func7,func3,opcode} )
       MUL    : mult_neg = opA[XLEN-1] ^ opB[XLEN-1];
       MULH   : mult_neg = opA[XLEN-1] ^ opB[XLEN-1];
       MULHSU : mult_neg = opA[XLEN-1];
@@ -265,7 +265,7 @@ endgenerate
    * Final output register
    */
   always @(posedge clk)
-    unique casex ( {mul_func7,mul_func3,mul_opcode} )
+    casex ( {mul_func7,mul_func3,mul_opcode} )
       MUL    : mul_r <= mult_r_signed_reg[XLEN -1:   0];
       MULW   : mul_r <= sext32( mult_r_signed_reg[31:0] );  //RV64
       default: mul_r <= mult_r_signed_reg[DXLEN-1:XLEN];
@@ -276,7 +276,7 @@ endgenerate
    * Stall / Bubble generation
    */
   always_comb
-    unique casex ( {func7,func3,opcode} )
+    casex ( {func7,func3,opcode} )
       MUL    : is_mul = 1'b1;
       MULH   : is_mul = 1'b1;
       MULW   : is_mul = ~xlen32;

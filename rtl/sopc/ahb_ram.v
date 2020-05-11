@@ -27,7 +27,7 @@ reg     [3:0]   mem_wstrb;
 reg     [31:0]  mem [0:MEM_SIZE-1];
 
 // Memory Init
-initial $readmemh("../../frw/app_test.txt", mem);
+initial $readmemh("app_test.txt", mem);
 
 // AHB response always OKAY
 assign hresp = 2'h0;
