@@ -98,7 +98,6 @@ module riscv_id #(
   logic                      multi_cycle_instruction;
   logic                      stall;
 
-
   //Immediates
   logic [XLEN          -1:0] immI,
                              immU;
@@ -142,7 +141,6 @@ module riscv_id #(
                              illegal_csr_rd,
                              illegal_csr_wr;
 
-
   //////////////////////////////////////////////////////////////////
   //
   // Module Body
@@ -160,11 +158,10 @@ module riscv_id #(
   /*
    * Instruction
    *
-   * TODO: push if-instr upon illegal-instruction
+   * push if-instr upon illegal-instruction
    */
   always @(posedge clk)
     if (!stall ) id_instr <= if_instr;
-
 
   always @(posedge clk,negedge rstn)
     if      (!rstn                            ) id_bubble_r <= 1'b1;
@@ -177,7 +174,6 @@ module riscv_id #(
   //local stall
   assign stall     = ex_stall | (du_stall & ~|wb_exception);
   assign id_bubble = stall | bu_flush | st_flush | |ex_exception | |mem_exception | |wb_exception | id_bubble_r;
-
 
   assign if_opcode  = if_instr[ 6: 2];
   assign if_func7   = if_instr[31:25];
@@ -245,7 +241,6 @@ module riscv_id #(
   assign immI = { {XLEN-11{if_instr[31]}},                             if_instr[30:25],if_instr[24:21],if_instr[20] };
   assign immU = { {XLEN-31{if_instr[31]}},if_instr[30:12],                                                    12'b0 };
 
-
   /*
    * Create ALU operands
    */
@@ -263,10 +258,9 @@ module riscv_id #(
        OPC_OP32    : can_ldwb = ~wb_bubble;
        OPC_JALR    : can_ldwb = ~wb_bubble;
        OPC_JAL     : can_ldwb = ~wb_bubble;
-       OPC_SYSTEM  : can_ldwb = ~wb_bubble; //TODO not ALL SYSTEM
+       OPC_SYSTEM  : can_ldwb = ~wb_bubble;
        default     : can_ldwb = 'b0;
     endcase
-
 
   always @(posedge clk)
     if (!stall)
@@ -322,7 +316,6 @@ module riscv_id #(
                     end
     endcase
     end
-
 
   always @(posedge clk)
     if (!stall)
@@ -386,7 +379,6 @@ module riscv_id #(
                     end
     endcase
 
-
   /*
    * Bypasses
    */
@@ -410,7 +402,6 @@ module riscv_id #(
       default       : multi_cycle_instruction <= 1'b0;
     endcase
 
-
   //Check for each stage if the result should be used
   always_comb
     casex (id_opcode)
@@ -424,10 +415,9 @@ module riscv_id #(
        OPC_OP32    : can_bypex = ~id_bubble;
        OPC_JALR    : can_bypex = ~id_bubble;
        OPC_JAL     : can_bypex = ~id_bubble;
-       OPC_SYSTEM  : can_bypex = ~id_bubble; //TODO not ALL SYSTEM
+       OPC_SYSTEM  : can_bypex = ~id_bubble;
        default     : can_bypex = 1'b0;
     endcase
-
 
   always_comb
     casex (ex_opcode)
@@ -441,10 +431,9 @@ module riscv_id #(
        OPC_OP32    : can_bypmem = ~ex_bubble & ~multi_cycle_instruction;
        OPC_JALR    : can_bypmem = ~ex_bubble & ~multi_cycle_instruction;
        OPC_JAL     : can_bypmem = ~ex_bubble & ~multi_cycle_instruction;
-       OPC_SYSTEM  : can_bypmem = ~ex_bubble & ~multi_cycle_instruction; //TODO not ALL SYSTEM
+       OPC_SYSTEM  : can_bypmem = ~ex_bubble & ~multi_cycle_instruction;
        default     : can_bypmem = 1'b0;
     endcase
-
 
   always_comb
     casex (mem_opcode)
@@ -458,10 +447,9 @@ module riscv_id #(
        OPC_OP32    : can_bypwb = ~mem_bubble & ~multi_cycle_instruction;
        OPC_JALR    : can_bypwb = ~mem_bubble & ~multi_cycle_instruction;
        OPC_JAL     : can_bypwb = ~mem_bubble & ~multi_cycle_instruction;
-       OPC_SYSTEM  : can_bypwb = ~mem_bubble & ~multi_cycle_instruction; //TODO not ALL SYSTEM
+       OPC_SYSTEM  : can_bypwb = ~mem_bubble & ~multi_cycle_instruction;
        default     : can_bypwb = 1'b0;
     endcase
-
 
   /*
    set bypass switches.
@@ -573,7 +561,6 @@ module riscv_id #(
                     end
     endcase
 
-
   /*
    * Generate STALL
    */
@@ -606,23 +593,7 @@ module riscv_id #(
         OPC_SYSTEM  : id_stall = (if_src1 == ex_dst);
         default     : id_stall = 'b0;
       endcase
-/*
-    else if (mem_opcode == OPC_LOAD)
-      casex (if_opcode)
-        OPC_OP_IMM  : id_stall = (if_src1 == mem_dst);
-        OPC_OP_IMM32: id_stall = (if_src1 == mem_dst);
-        OPC_OP      : id_stall = (if_src1 == mem_dst) | (if_src2 == mem_dst);
-        OPC_OP32    : id_stall = (if_src1 == mem_dst) | (if_src2 == mem_dst);
-        OPC_BRANCH  : id_stall = (if_src1 == mem_dst) | (if_src2 == mem_dst);
-        OPC_JALR    : id_stall = (if_src1 == mem_dst);
-        OPC_LOAD    : id_stall = (if_src1 == mem_dst);
-        OPC_STORE   : id_stall = (if_src1 == mem_dst) | (if_src2 == mem_dst);
-        OPC_SYSTEM  : id_stall = (if_src1 == mem_dst);
-        default     : id_stall = 'b0;
-      endcase
-*/
    else id_stall = 'b0;
-
 
   /*
    * Generate Illegal Instruction
@@ -634,7 +605,6 @@ module riscv_id #(
       OPC_STORE : illegal_instr = illegal_lsu_instr;
       default   : illegal_instr = illegal_alu_instr & (has_muldiv ? illegal_muldiv_instr : 1'b1);
     endcase
-
 
   //ALU
   always_comb
@@ -718,7 +688,6 @@ module riscv_id #(
       default           : illegal_lsu_instr = 1'b1;
     endcase
 
-
   //MULDIV
   always_comb
     casex ( {xlen32,if_func7,if_func3,if_opcode} )
@@ -773,7 +742,6 @@ module riscv_id #(
                                    (~has_s & st_prv == PRV_U & ~st_mcounteren[IR]) |
                                    ( has_s & st_prv == PRV_S & ~st_mcounteren[IR]) |
                                    ( has_s & st_prv == PRV_U &  st_mcounteren[IR] & st_scounteren[IR]);
-      //TODO: hpmcounters
 
       //Supervisor
       SSTATUS   : illegal_csr_rd = ~has_s               | (st_prv < PRV_S);
@@ -934,10 +902,8 @@ module riscv_id #(
       PMPADDR15 : illegal_csr_wr =                        (st_prv < PRV_M);
       MCYCLE    : illegal_csr_wr =                        (st_prv < PRV_M); 
       MINSTRET  : illegal_csr_wr =                        (st_prv < PRV_M);
-     //TODO: performance counters
       MCYCLEH   : illegal_csr_wr =          (XLEN > 32) | (st_prv < PRV_M);
       MINSTRETH : illegal_csr_wr =          (XLEN > 32) | (st_prv < PRV_M);
-
       default   : illegal_csr_wr = 1'b1;
     endcase
 

@@ -8,7 +8,6 @@ module riscv_st #(
   parameter            XLEN            = 32,
   parameter            FLEN            = 64,
   parameter [XLEN-1:0] PC_INIT         = 'h200,
-
   parameter            IS_RV32E        = 0,
   parameter            HAS_RVN         = 0,
   parameter            HAS_RVC         = 0,
@@ -20,19 +19,15 @@ module riscv_st #(
   parameter            HAS_RVT         = 0,
   parameter            HAS_RVP         = 0,
   parameter            HAS_EXT         = 0,
-
   parameter            HAS_USER        = 1,
   parameter            HAS_SUPER       = 1,
   parameter            HAS_HYPER       = 0,
-
+  parameter            PMP_CNT         = 16,
   parameter            MNMIVEC_DEFAULT = PC_INIT -'h004,
   parameter            MTVEC_DEFAULT   = PC_INIT -'h040,
   parameter            HTVEC_DEFAULT   = PC_INIT -'h080,
   parameter            STVEC_DEFAULT   = PC_INIT -'h0C0,
-  parameter            UTVEC_DEFAULT   = PC_INIT -'h100,
-
-  parameter            PMP_CNT               = 16,    //number of PMP CSR blocks (max.16)
-  parameter            HARTID                = 0      //hardware thread-id
+  parameter            UTVEC_DEFAULT   = PC_INIT -'h100
 ) (
   input                                 clk,
   input                                 rstn,
@@ -438,7 +433,7 @@ module riscv_st #(
   assign csr.mimpid[    23:16] = 'd10;
   assign csr.mimpid[    15: 8] = 'd2;
   assign csr.mimpid[     7: 0] = 'd2;
-  assign csr.mhartid           = HARTID;
+  assign csr.mhartid           = 'd0;
 
   //mstatus
   assign csr.mstatus.sd = &csr.mstatus.fs | &csr.mstatus.xs;

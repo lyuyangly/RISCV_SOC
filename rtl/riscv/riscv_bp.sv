@@ -20,7 +20,6 @@ module riscv_bp #(
   input  [XLEN          -1:0] if_parcel_pc_i,
   output [               1:0] bp_bp_predict_o,
 
-
   //Write side
   input  [XLEN          -1:0] ex_pc_i,
   input  [BP_GLOBAL_BITS-1:0] bu_bp_history_i,      //branch history
@@ -28,7 +27,6 @@ module riscv_bp #(
   input                       bu_bp_btaken_i,
   input                       bu_bp_update_i
 );
-
 
   //////////////////////////////////////////////////////////////////
   //
@@ -41,7 +39,10 @@ module riscv_bp #(
                        wadr;
 
   logic [XLEN    -1:0] if_parcel_pc_dly;
+
   logic [         1:0] new_prediction;
+  bit   [         1:0] old_prediction;
+
 
   //////////////////////////////////////////////////////////////////
   //
@@ -57,7 +58,6 @@ module riscv_bp #(
                            : {bu_bp_history_i, if_parcel_pc_i  [BP_LOCAL_BITS_LSB +: BP_LOCAL_BITS]};
   assign wadr = {bu_bp_history_i, ex_pc_i[BP_LOCAL_BITS_LSB +: BP_LOCAL_BITS]};
 
-
   /*
    *  Calculate new prediction bits
    *
@@ -70,22 +70,24 @@ module riscv_bp #(
    * Hookup 1R1W memory
    */
   rl_ram_1r1w #(
-    .ABITS   ( ADR_BITS        ),
-    .DBITS   ( 2               ))
-  u_bp_ram (
-    .clk_i   ( clk_i           ),
-    .rst_ni  ( rst_ni          ),
+    .ABITS   ( ADR_BITS       ),
+    .DBITS   ( 2              ))
+  u_bp_ram   (
+    .clk_i   ( clk_i          ),
+    .rst_ni  ( rst_ni         ),
  
     //Write side
-    .waddr_i ( wadr            ),
-    .din_i   ( new_prediction  ),
-    .we_i    ( bu_bp_update_i  ),
-    .be_i    ( 1'b1            ),
+    .waddr_i ( wadr           ),
+    .din_i   ( new_prediction ),
+    .we_i    ( bu_bp_update_i ),
+    .be_i    ( 1'b1           ),
 
     //Read side
-    .raddr_i ( radr            ),
-    .re_i    ( 1'b1            ),
-    .dout_o  ( bp_bp_predict_o )
+    .raddr_i ( radr           ),
+    .re_i    ( 1'b1           ),
+    .dout_o  ( old_prediction )
   );
+
+assign bp_bp_predict_o = old_prediction;
 
 endmodule

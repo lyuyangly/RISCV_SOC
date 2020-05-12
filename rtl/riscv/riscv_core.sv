@@ -15,21 +15,18 @@ module riscv_core #(
   parameter            HAS_FPU               = 1,
   parameter            HAS_MMU               = 0,
   parameter            HAS_RVA               = 0,
-  parameter            HAS_RVM               = 1,
-  parameter            HAS_RVC               = 1,
   parameter            IS_RV32E              = 0,
-  parameter            MULT_LATENCY          = 0,
-  parameter            BREAKPOINTS           = 3,
   parameter            PMP_CNT               = 16,
-  parameter            BP_GLOBAL_BITS        = 2,
+  parameter            BREAKPOINTS           = 3,
+  parameter            MULT_LATENCY          = 0,
   parameter            BP_LOCAL_BITS         = 10,
+  parameter            BP_GLOBAL_BITS        = 2,
+  parameter            PARCEL_SIZE           = 32,
   parameter            MNMIVEC_DEFAULT       = PC_INIT -'h004,
   parameter            MTVEC_DEFAULT         = PC_INIT -'h040,
   parameter            HTVEC_DEFAULT         = PC_INIT -'h080,
   parameter            STVEC_DEFAULT         = PC_INIT -'h0C0,
-  parameter            UTVEC_DEFAULT         = PC_INIT -'h100,
-  parameter            HARTID                = 0,
-  parameter            PARCEL_SIZE           = 32
+  parameter            UTVEC_DEFAULT         = PC_INIT -'h100
 ) (
   input                             clk,    //Clock
   input                             rstn,   //Reset
@@ -221,7 +218,6 @@ module riscv_core #(
     .HAS_SUPER      ( HAS_SUPER      ),
     .HAS_HYPER      ( HAS_HYPER      ),
     .HAS_RVA        ( HAS_RVA        ),
-    .HAS_RVM        ( HAS_RVM        ),
     .MULT_LATENCY   ( MULT_LATENCY   ) )
   u_idu (
     .id_src1  ( rf_src1[0]  ),
@@ -235,9 +231,7 @@ module riscv_core #(
   riscv_ex #(
     .XLEN           ( XLEN           ),
     .PC_INIT        ( PC_INIT        ),
-    .HAS_RVC        ( HAS_RVC        ),
-    .HAS_RVA        ( HAS_RVA        ),
-    .HAS_RVM        ( HAS_RVM        ),
+    .BP_GLOBAL_BITS ( BP_GLOBAL_BITS ),
     .MULT_LATENCY   ( MULT_LATENCY   ) )
   u_exu (
     .rf_srcv1 ( rf_srcv1[0] ),
@@ -299,15 +293,12 @@ module riscv_core #(
     .HAS_USER              ( HAS_USER              ),
     .HAS_SUPER             ( HAS_SUPER             ),
     .HAS_HYPER             ( HAS_HYPER             ),
-
+    .PMP_CNT               ( PMP_CNT               ),
     .MNMIVEC_DEFAULT       ( MNMIVEC_DEFAULT       ),
     .MTVEC_DEFAULT         ( MTVEC_DEFAULT         ),
     .HTVEC_DEFAULT         ( HTVEC_DEFAULT         ),
     .STVEC_DEFAULT         ( STVEC_DEFAULT         ),
-    .UTVEC_DEFAULT         ( UTVEC_DEFAULT         ),
-
-    .PMP_CNT               ( PMP_CNT               ),
-    .HARTID                ( HARTID                ) )
+    .UTVEC_DEFAULT         ( UTVEC_DEFAULT         ) )
   u_csr    ( .* );
 
   /*

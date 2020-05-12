@@ -22,7 +22,7 @@ initial begin
     rst_n   = 1'b0;
     repeat(10) @(posedge clk);
     rst_n   = 1'b1;
-    #10ms;
+    #20ms;
     $finish;
 end
 

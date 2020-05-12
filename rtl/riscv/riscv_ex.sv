@@ -8,9 +8,6 @@ module riscv_ex #(
   parameter            XLEN           = 32,
   parameter [XLEN-1:0] PC_INIT        = 'h200,
   parameter            BP_GLOBAL_BITS = 2,
-  parameter            HAS_RVC        = 0,
-  parameter            HAS_RVA        = 0,
-  parameter            HAS_RVM        = 0,
   parameter            MULT_LATENCY   = 0
 ) (
   input                           clk,
@@ -125,7 +122,6 @@ module riscv_ex #(
   logic [EXCEPTION_SIZE-1:0] bu_exception,
                              lsu_exception;
 
-
   ////////////////////////////////////////////////////////////////
   //
   // Module Body
@@ -138,13 +134,11 @@ module riscv_ex #(
     if      (!rstn                 ) ex_pc <= PC_INIT;
     else if (!ex_stall && !du_stall) ex_pc <= id_pc;  //stall during DBG to retain PPC
 
-
   /*
    * Instruction
    */
   always @(posedge clk)
     if (!ex_stall) ex_instr <= id_instr;
-
 
   /*
    * Bypasses
@@ -171,61 +165,36 @@ module riscv_ex #(
       default: opB =                           id_opB;
     endcase
 
-
   /*
    * Execution Units
    */
   riscv_alu #(
     .XLEN ( XLEN ) )
-  alu (
-    .*
-  );
+  u_alu ( .* );
 
   // Load-Store Unit
   riscv_lsu #(
-    .XLEN           ( XLEN           ) )
-  lsu (
-    .*
-  );
+    .XLEN ( XLEN ) )
+  u_lsu ( .* );
 
   // Branch Unit
   riscv_bu #(
     .XLEN           ( XLEN           ),
-    .BP_GLOBAL_BITS ( BP_GLOBAL_BITS ) )
-  bu (
+    .BP_GLOBAL_BITS ( BP_GLOBAL_BITS ))
+  u_bu (
     //Branch unit handles exceptions and relays ID-exceptions
     .bu_exception ( ex_exception ),
     .*
   );
 
-generate
-  if (HAS_RVM)
-  begin
-      riscv_mul #(
-        .XLEN         ( XLEN         ),
-        .MULT_LATENCY ( MULT_LATENCY )
-      )
-      mul (
-        .*
-      );
+  riscv_mul #(
+    .XLEN         ( XLEN         ),
+    .MULT_LATENCY ( MULT_LATENCY ))
+  u_mul ( .* );
 
-      riscv_div #(
-        .XLEN ( XLEN ))
-      div (
-        .*
-      );
-  end
-  else
-  begin
-      assign mul_bubble = 1'b1;
-      assign mul_r      =  'h0;
-      assign mul_stall  = 1'b0;
-
-      assign div_bubble = 1'b1;
-      assign div_r      =  'h0;
-      assign div_stall  = 1'b0;
-  end
-endgenerate
+  riscv_div #(
+    .XLEN ( XLEN ))
+  u_div ( .* );
 
   /*
    * Combine outputs into 1 single EX output

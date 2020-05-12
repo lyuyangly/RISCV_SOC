@@ -47,11 +47,11 @@ module riscv_biu #(
     output  wire                            if_parcel_page_fault    ,
     input   wire    [XLEN-1:0]              dmem_adr                ,
     input   wire    [XLEN-1:0]              dmem_d                  ,
-    output  reg     [XLEN-1:0]              dmem_q                  ,
+    output  wire    [XLEN-1:0]              dmem_q                  ,
     input   wire                            dmem_we                 ,
     input   biu_size_t                      dmem_size               ,
     input   wire                            dmem_req                ,
-    output  reg                             dmem_ack                ,
+    output  wire                            dmem_ack                ,
     output  wire                            dmem_err                ,
     output  wire                            dmem_misaligned         ,
     output  wire                            dmem_page_fault
@@ -181,8 +181,6 @@ always_ff @(posedge hclk, negedge hreset_n)
         dhwrite         <= 1'b0;
         dhsize          <= 3'h0;
         dhaddr          <= 'h0;
-        dmem_q          <= 'h0;
-        dmem_ack        <= 1'b0;
     end
     else begin
         case(dstate)
@@ -195,7 +193,6 @@ always_ff @(posedge hclk, negedge hreset_n)
                     dhsize          <= dmem_size;
                     dhaddr          <= dmem_adr;
                     dhwdata         <= dmem_d;
-                    dmem_ack        <= 1'b0;
                 end
                 else begin
                     dstate          <= S_IDLE;
@@ -221,13 +218,8 @@ always_ff @(posedge hclk, negedge hreset_n)
                 dhbusreq            <= 1'b0;
             end
             S_BURST1 : begin
-                if(~dmem_req && dmem_ack) begin
+                if(dhready) begin
                     dstate          <= S_IDLE;
-                end
-                else if(dhready) begin
-                    dmem_ack        <= 1'b1;
-                    dmem_q          <= dhrdata;
-                    dstate          <= S_BURST1;
                 end
                 else begin
                     dstate          <= S_BURST1;
@@ -239,6 +231,8 @@ always_ff @(posedge hclk, negedge hreset_n)
 assign dhmasterlock         = 1'b0;
 assign dhburst              = 3'h0;
 assign dhprot               = 4'h1;
+assign dmem_q               = dhrdata;
+assign dmem_ack             = (dstate == S_BURST1) && dhready;
 assign dmem_err             = 1'b0;
 assign dmem_misaligned      = 1'b0;
 assign dmem_page_fault      = 1'b0;
