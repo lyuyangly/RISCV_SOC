@@ -10,8 +10,7 @@ module riscv_bp #(
   parameter            HAS_BPU           = 0,
   parameter            BP_GLOBAL_BITS    = 2,
   parameter            BP_LOCAL_BITS     = 10,
-  parameter            BP_LOCAL_BITS_LSB = 2,                //LSB of if_nxt_pc to use
-  parameter            AVOID_X           = 0
+  parameter            BP_LOCAL_BITS_LSB = 2
 ) (
   input                       clk_i,
   input                       rst_ni,
@@ -42,10 +41,7 @@ module riscv_bp #(
                        wadr;
 
   logic [XLEN    -1:0] if_parcel_pc_dly;
-
   logic [         1:0] new_prediction;
-  bit   [         1:0] old_prediction;
-
 
   //////////////////////////////////////////////////////////////////
   //
@@ -74,31 +70,22 @@ module riscv_bp #(
    * Hookup 1R1W memory
    */
   rl_ram_1r1w #(
-    .ABITS      ( ADR_BITS   ),
-    .DBITS      ( 2          ))
-  bp_ram_inst(
-    .rst_ni  ( rst_ni         ),
-    .clk_i   ( clk_i          ),
+    .ABITS   ( ADR_BITS        ),
+    .DBITS   ( 2               ))
+  u_bp_ram (
+    .clk_i   ( clk_i           ),
+    .rst_ni  ( rst_ni          ),
  
     //Write side
-    .waddr_i ( wadr           ),
-    .din_i   ( new_prediction ),
-    .we_i    ( bu_bp_update_i ),
-    .be_i    ( 1'b1           ),
+    .waddr_i ( wadr            ),
+    .din_i   ( new_prediction  ),
+    .we_i    ( bu_bp_update_i  ),
+    .be_i    ( 1'b1            ),
 
     //Read side
-    .raddr_i ( radr           ),
-    .re_i    ( 1'b1           ),
-    .dout_o  ( old_prediction )
+    .raddr_i ( radr            ),
+    .re_i    ( 1'b1            ),
+    .dout_o  ( bp_bp_predict_o )
   );
-
-generate
-  //synopsys translate_off
-  if (AVOID_X)
-     assign bp_bp_predict_o = (old_prediction == 2'bxx) ? $random : old_prediction;
-  else
-  //synopsys translate_on
-     assign bp_bp_predict_o = old_prediction;
-endgenerate
 
 endmodule
