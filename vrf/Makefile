@@ -9,7 +9,7 @@ verdi:
 	@verdi -sverilog riscv_sopc_tb.sv -f ../rtl/filelist/filelist.lst -top riscv_sopc_tb &
 
 cmp:
-	@vcs -LDFLAGS -Wl,--no-as-needed -debug_pp +lint=TFIPC-L +lint=PCWM -P ${NOVAS_HOME}/share/PLI/VCS/LINUX/novas.tab ${NOVAS_HOME}/share/PLI/VCS/LINUX/pli.a -sverilog riscv_sopc_tb.sv -f ../rtl/filelist/filelist.lst -top riscv_sopc_tb -l vcs.log
+	@vcs -LDFLAGS -Wl,--no-as-needed -debug_all +lint=TFIPC-L +lint=PCWM -P ${NOVAS_HOME}/share/PLI/VCS/LINUX/novas.tab ${NOVAS_HOME}/share/PLI/VCS/LINUX/pli.a -sverilog riscv_sopc_tb.sv -f ../rtl/filelist/filelist.lst -top riscv_sopc_tb -l vcs.log
 
 run:
 	@./simv -l simv.log
