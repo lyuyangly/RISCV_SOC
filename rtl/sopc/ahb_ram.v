@@ -21,10 +21,12 @@ module ahb_ram (
 
 localparam      MEM_SIZE = 4096;
 
+integer         k;
 wire            hbus_ena;
 reg             hbus_ena_d;
 reg     [3:0]   mem_wstrb;
-reg     [31:0]  mem [0:MEM_SIZE-1];
+reg     [31:0]  mem_addr;
+reg     [31:0]  mem[MEM_SIZE-1:0];
 
 // Memory Init
 initial $readmemh("app_test.txt", mem);
@@ -39,6 +41,12 @@ always @(posedge hclk, negedge hreset_n)
         hbus_ena_d <= 1'b0;
     else
         hbus_ena_d <= hbus_ena;
+
+always @(posedge hclk, negedge hreset_n)
+    if(~hreset_n)
+        mem_addr <= 32'd0;
+    else if(hbus_ena)
+        mem_addr <= haddr;
 
 always @(posedge hclk, negedge hreset_n)
     if(~hreset_n)
@@ -72,16 +80,9 @@ always @(posedge hclk, negedge hreset_n)
     end
 
 always @(posedge hclk)
-    if(hbus_ena_d) begin
-        if(mem_wstrb[0])
-            mem[haddr[31:2]][ 7: 0] <= hwdata[ 7: 0];
-        if(mem_wstrb[1])
-            mem[haddr[31:2]][15: 8] <= hwdata[15: 8];
-        if(mem_wstrb[2])
-            mem[haddr[31:2]][23:16] <= hwdata[23:16];
-        if(mem_wstrb[3])
-            mem[haddr[31:2]][31:24] <= hwdata[31:24];
-    end
+    for(k=0; k<4; k=k+1)
+        if(mem_wstrb[k] && hbus_ena_d)
+            mem[mem_addr[31:2]][k*8+:8] <= hwdata[k*8+:8];
 
 always @(posedge hclk)
     if(hbus_ena)
