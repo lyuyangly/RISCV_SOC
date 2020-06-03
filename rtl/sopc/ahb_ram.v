@@ -29,7 +29,11 @@ reg     [31:0]  mem_addr;
 reg     [31:0]  mem[MEM_SIZE-1:0];
 
 // Memory Init
-initial $readmemh("app_test.txt", mem);
+`ifdef SYNTHESIS
+initial $readmemh("../../frw/app_test.txt", mem);
+`else
+initial $readmemh("../frw/app_test.txt", mem);
+`endif
 
 // AHB response always OKAY
 assign hresp = 2'h0;

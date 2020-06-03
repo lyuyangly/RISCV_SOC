@@ -82,5 +82,16 @@ report_timing_summary -file ../rpt/${DESIGN}_routed_timing_summary.rpt
 
 # ------------------------------------------------------------------------------
 write_bitstream -force ../rpt/${DESIGN}.bit
-write_cfgmem -format bin -interface SPIx1 -size 256 -loadbit "up 0 ../rpt/${DESIGN}.bit" ../rpt/${DESIGN}.bin
+write_cfgmem -force -format bin -interface SPIx1 -size 256 -loadbit "up 0 ../rpt/${DESIGN}.bit" ../rpt/${DESIGN}.bin
+
+# ------------------------------------------------------------------------------
+open_hw
+connect_hw_server -url localhost:3121
+open_hw_target [lindex [get_hw_targets -of_objects [get_hw_servers localhost]] 0]
+current_hw_device [lindex [get_hw_devices] 1]
+refresh_hw_device -update_hw_probes false [lindex [get_hw_devices] 1]
+set_property PROBES.FILE "../rpt/${DESIGN}.ltx" [lindex [get_hw_devices] 1]
+set_property PROGRAM.FILE "../rpt/${DESIGN}.bit" [lindex [get_hw_devices] 1]
+program_hw_devices [lindex [get_hw_devices] 1]
+refresh_hw_device [lindex [get_hw_devices] 1]
 

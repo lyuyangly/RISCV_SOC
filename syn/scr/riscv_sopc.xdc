@@ -1,5 +1,6 @@
 set_property PACKAGE_PIN K17 [get_ports clk]
-set_property PACKAGE_PIN E17 [get_ports rst_n]
+#set_property PACKAGE_PIN E17 [get_ports rst_n]
+set_property PACKAGE_PIN M19 [get_ports rst_n]
 set_property PACKAGE_PIN M15 [get_ports pio[0]]
 set_property PACKAGE_PIN G14 [get_ports pio[1]]
 set_property PACKAGE_PIN M17 [get_ports pio[2]]
