@@ -113,9 +113,8 @@ package riscv_pkg;
                      DBG_NPC = 12'h200,
                      DBG_PPC = 12'h201;
 
-// OP Code
-    parameter            ILEN      = 32;
-    parameter [ILEN-1:0] INSTR_NOP = 'h13;
+    // OP Code
+    parameter [31:0] INSTR_NOP = 'h13;
 
     /*
      * Opcodes

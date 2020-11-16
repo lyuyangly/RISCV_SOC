@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Load Store Unit
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_lsu #(
   parameter XLEN           = 32,
   parameter HAS_A          = 0
@@ -15,7 +16,7 @@ module riscv_lsu #(
 
   //Instruction
   input                           id_bubble,
-  input      [ILEN          -1:0] id_instr,
+  input      [XLEN          -1:0] id_instr,
   output reg                      lsu_bubble,
   output     [XLEN          -1:0] lsu_r,
 

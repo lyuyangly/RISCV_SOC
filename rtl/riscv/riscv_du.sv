@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Debug Unit
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_du #(
   parameter XLEN           = 32,
   parameter BREAKPOINTS    = 3
@@ -42,7 +43,7 @@ module riscv_du #(
   input                           bu_flush,
                                   st_flush,
 
-  input      [ILEN          -1:0] if_instr,
+  input      [XLEN          -1:0] if_instr,
                                   mem_instr,
   input                           if_bubble,
                                   mem_bubble,

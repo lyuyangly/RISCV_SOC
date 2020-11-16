@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Multiplier Unit
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_mul #(
   parameter XLEN         = 32,
   parameter MULT_LATENCY = 0
@@ -16,7 +17,7 @@ module riscv_mul #(
 
   //Instruction
   input                 id_bubble,
-  input      [ILEN-1:0] id_instr,
+  input      [XLEN-1:0] id_instr,
 
   //Operands
   input      [XLEN-1:0] opA,
@@ -89,7 +90,7 @@ module riscv_mul #(
   // Variables
   //
   logic              xlen32;
-  logic [ILEN  -1:0] mul_instr;
+  logic [XLEN  -1:0] mul_instr;
 
   logic [       6:2] opcode, mul_opcode;
   logic [       2:0] func3,  mul_func3;

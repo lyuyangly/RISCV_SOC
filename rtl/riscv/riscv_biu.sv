@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : RISC-V BIU
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_biu #(
     parameter   XLEN        = 32,
     parameter   PARCEL_SIZE = 32

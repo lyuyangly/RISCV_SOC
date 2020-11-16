@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Branch Unit
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_bu #(
   parameter            XLEN           = 32,
   parameter [XLEN-1:0] PC_INIT        = 'h200,
@@ -29,7 +30,7 @@ module riscv_bu #(
 
   //Instruction
   input                           id_bubble,
-  input      [ILEN          -1:0] id_instr,
+  input      [XLEN          -1:0] id_instr,
 
   input      [EXCEPTION_SIZE-1:0] id_exception,
                                   ex_exception,

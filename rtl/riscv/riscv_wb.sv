@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Data Memory Access - Write Back
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_wb #(
   parameter            XLEN    = 32,
   parameter [XLEN-1:0] PC_INIT = 'h200
@@ -16,9 +17,9 @@ module riscv_wb #(
   input  logic [XLEN          -1:0] mem_pc_i,
   output logic [XLEN          -1:0] wb_pc_o,
 
-  input  logic [ILEN          -1:0] mem_instr_i,
+  input  logic [XLEN          -1:0] mem_instr_i,
   input  logic                      mem_bubble_i,
-  output logic [ILEN          -1:0] wb_instr_o,
+  output logic [XLEN          -1:0] wb_instr_o,
   output logic                      wb_bubble_o,
 
   input  logic [EXCEPTION_SIZE-1:0] mem_exception_i,

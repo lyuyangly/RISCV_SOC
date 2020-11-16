@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Thread State (priv spec 1.10)
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_st #(
   parameter            XLEN            = 32,
   parameter            FLEN            = 64,
@@ -34,7 +35,7 @@ module riscv_st #(
 
   input            [XLEN          -1:0] id_pc,
   input                                 id_bubble,
-  input            [ILEN          -1:0] id_instr,
+  input            [XLEN          -1:0] id_instr,
   input                                 id_stall,
 
   input                                 bu_flush,
@@ -44,7 +45,7 @@ module riscv_st #(
 
   input            [XLEN          -1:0] wb_pc,
   input                                 wb_bubble,
-  input            [ILEN          -1:0] wb_instr,
+  input            [XLEN          -1:0] wb_instr,
   input            [EXCEPTION_SIZE-1:0] wb_exception,
   input            [XLEN          -1:0] wb_badaddr,
 

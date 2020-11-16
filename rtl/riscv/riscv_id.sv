@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Instruction Decoder
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_id #(
   parameter            XLEN           = 32,
   parameter [XLEN-1:0] PC_INIT        = 'h200,
@@ -38,15 +39,15 @@ module riscv_id #(
 
 
   //Instruction
-  input      [ILEN          -1:0] if_instr,
+  input      [XLEN          -1:0] if_instr,
   input                           if_bubble,
-  output reg [ILEN          -1:0] id_instr,
+  output reg [XLEN          -1:0] id_instr,
   output reg                      id_bubble,
-  input      [ILEN          -1:0] ex_instr,
+  input      [XLEN          -1:0] ex_instr,
   input                           ex_bubble,
-  input      [ILEN          -1:0] mem_instr,
+  input      [XLEN          -1:0] mem_instr,
   input                           mem_bubble,
-  input      [ILEN          -1:0] wb_instr,
+  input      [XLEN          -1:0] wb_instr,
   input                           wb_bubble,
 
   //Exceptions

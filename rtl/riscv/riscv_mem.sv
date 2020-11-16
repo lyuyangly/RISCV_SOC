@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Memory Unit
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_mem #(
   parameter            XLEN    = 32,
   parameter [XLEN-1:0] PC_INIT = 'h200
@@ -19,9 +20,9 @@ module riscv_mem #(
 
   //Instruction
   input                           ex_bubble,
-  input      [ILEN          -1:0] ex_instr,
+  input      [XLEN          -1:0] ex_instr,
   output reg                      mem_bubble,
-  output reg [ILEN          -1:0] mem_instr,
+  output reg [XLEN          -1:0] mem_instr,
 
   input      [EXCEPTION_SIZE-1:0] ex_exception,
                                   wb_exception,

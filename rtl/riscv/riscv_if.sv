@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Instruction Fetch
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_if #(
   parameter            XLEN           = 32,
   parameter [XLEN-1:0] PC_INIT        = 'h200,
@@ -21,7 +22,7 @@ module riscv_if #(
   input                           if_parcel_misaligned,
   input                           if_parcel_page_fault,
 
-  output reg [ILEN          -1:0] if_instr,      //Instruction out
+  output reg [XLEN          -1:0] if_instr,      //Instruction out
   output reg                      if_bubble,     //Insert bubble in the pipe (NOP instruction)
   output reg [EXCEPTION_SIZE-1:0] if_exception,  //Exceptions
 
@@ -54,8 +55,8 @@ module riscv_if #(
 
   logic                      flushes;      //OR all flush signals
 
-  logic [2*ILEN        -1:0] parcel_shift_register;
-  logic [ILEN          -1:0] active_parcel,
+  logic [2*XLEN        -1:0] parcel_shift_register;
+  logic [XLEN          -1:0] active_parcel,
                              converted_instruction,
                              pd_instr;
   logic                      pd_bubble;
@@ -139,9 +140,9 @@ module riscv_if #(
             3'b000:                           parcel_shift_register <= {INSTR_NOP , if_parcel};
             3'b001: if (is_16bit_instruction) parcel_shift_register <= {INSTR_NOP , if_parcel};
                     else                      parcel_shift_register <= {if_parcel, parcel_shift_register[15:0]};
-            3'b011: if (is_16bit_instruction) parcel_shift_register <= {if_parcel, parcel_shift_register[16 +: ILEN]};
+            3'b011: if (is_16bit_instruction) parcel_shift_register <= {if_parcel, parcel_shift_register[16 +: XLEN]};
                     else                      parcel_shift_register <= {INSTR_NOP , if_parcel};
-            3'b111: if (is_16bit_instruction) parcel_shift_register <= {INSTR_NOP , parcel_shift_register[16 +: ILEN]};
+            3'b111: if (is_16bit_instruction) parcel_shift_register <= {INSTR_NOP , parcel_shift_register[16 +: XLEN]};
                     else                      parcel_shift_register <= {if_parcel, parcel_shift_register[32 +: 16]};
         endcase
 
@@ -163,7 +164,7 @@ module riscv_if #(
                     else                      parcel_sr_valid <= {if_parcel_valid,            1'b1}; //3'b111;
         endcase
 
-  assign active_parcel = parcel_shift_register[ILEN-1:0];
+  assign active_parcel = parcel_shift_register[XLEN-1:0];
   assign pd_bubble     = is_16bit_instruction ? ~parcel_sr_valid[0] : ~&parcel_sr_valid[1:0];
 
   assign is_16bit_instruction = ~&active_parcel[1:0];

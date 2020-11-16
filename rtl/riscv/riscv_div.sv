@@ -4,6 +4,7 @@
 //  Date        : 2020-05-10
 //  Description : Implements Non-Performing Restoring Division
 //##################################################################################################
+import riscv_pkg::*;
 module riscv_div #(
   parameter XLEN = 32
 ) (
@@ -15,7 +16,7 @@ module riscv_div #(
 
   //Instruction
   input                 id_bubble,
-  input      [ILEN-1:0] id_instr,
+  input      [XLEN-1:0] id_instr,
 
   //Operands
   input      [XLEN-1:0] opA,
@@ -61,7 +62,7 @@ module riscv_div #(
   // Variables
   //
   logic                    xlen32;
-  logic [ILEN        -1:0] div_instr;
+  logic [XLEN        -1:0] div_instr;
 
   logic [             6:2] opcode, div_opcode;
   logic [             2:0] func3,  div_func3;

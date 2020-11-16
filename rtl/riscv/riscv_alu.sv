@@ -18,7 +18,7 @@ module riscv_alu #(
 
   //Instruction
   input                 id_bubble,
-  input      [ILEN-1:0] id_instr,
+  input      [XLEN-1:0] id_instr,
 
   //Operands
   input      [XLEN-1:0] opA,
@@ -39,6 +39,7 @@ module riscv_alu #(
   input      [     1:0] st_xlen
 );
 
+import riscv_pkg::*;
 
   ////////////////////////////////////////////////////////////////
   //

@@ -89,7 +89,7 @@ module riscv_core #(
                              mem_pc,
                              wb_pc;
 
-  logic [ILEN          -1:0] if_instr,
+  logic [XLEN          -1:0] if_instr,
                              id_instr,
                              ex_instr,
                              mem_instr,
